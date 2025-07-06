@@ -30,6 +30,8 @@ function App() {
   const [isConfiguratorOpen, setIsConfiguratorOpen] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState('');
   const [isExploreOpen, setIsExploreOpen] = useState(false);
+  const [isCarDetailsOpen, setIsCarDetailsOpen] = useState(false);
+  const [selectedCarDetails, setSelectedCarDetails] = useState<any>(null);
 
   const heroImages = [
     'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=1920',
@@ -88,6 +90,11 @@ function App() {
     setIsConfiguratorOpen(true);
   };
 
+  const openCarDetails = (vehicle: any) => {
+    setSelectedCarDetails(vehicle);
+    setIsCarDetailsOpen(true);
+  };
+
   if (isLoading) {
     return <LoadingScreen onComplete={() => setIsLoading(false)} />;
   }
@@ -117,7 +124,7 @@ function App() {
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               >
                 <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-xl flex items-center justify-center transform rotate-12 pulse-glow">
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 via-orange-400 to-pink-500 rounded-xl flex items-center justify-center transform rotate-12 pulse-glow">
                     <Car className="h-7 w-7 text-white transform -rotate-12" />
                   </div>
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-500 rounded-full animate-pulse"></div>
@@ -207,12 +214,11 @@ function App() {
         {/* Hero Section */}
         <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden cyberpunk-grid">
           <div className="absolute inset-0 z-0">
-            <div className="absolute inset-0 bg-gradient-to-br from-orange-600 via-red-600 to-pink-600"></div>
             <ImageSlideshow 
               images={heroImages}
-              className="w-full h-full mix-blend-overlay opacity-70"
+              className="w-full h-full object-cover opacity-90"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent"></div>
           </div>
           
           <ParallaxSection speed={0.5} className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -506,7 +512,7 @@ function App() {
                     <div className="text-2xl font-black text-gray-900 mb-6">{vehicle.price}</div>
                     <MagneticButton 
                       className="w-full bg-gray-900 hover:bg-orange-500 text-white py-3 rounded-full font-bold transition-all duration-300 cursor-pointer"
-                      onClick={() => openTestDrive(vehicle.name)}
+                      onClick={() => openCarDetails(vehicle)}
                     >
                       LEARN MORE
                     </MagneticButton>
@@ -518,38 +524,27 @@ function App() {
         </section>
 
         {/* Innovation Section */}
-        <section id="innovation" className="py-24 bg-gray-900 text-white neural-network">
+        <section id="innovation" className="py-24 bg-white text-gray-900">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <motion.div 
-              className="text-center mb-20"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <span className="inline-block bg-orange-500/20 text-orange-400 px-6 py-2 rounded-full text-sm font-bold tracking-widest mb-6">
+            <div className="text-center mb-20">
+              <span className="inline-block bg-orange-100 text-orange-600 px-6 py-2 rounded-full text-sm font-bold tracking-widest mb-6">
                 INNOVATION
               </span>
               <h2 className="text-6xl md:text-7xl font-black mb-8">
                 BEYOND
                 <br />
-                <span className="holographic">
+                <span className="text-orange-500">
                   BOUNDARIES
                 </span>
               </h2>
-            </motion.div>
+            </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center mb-20">
-              <motion.div
-                initial={{ opacity: 0, x: -50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
-              >
-                <h3 className="text-4xl font-black mb-8 neon-glow">AUTONOMOUS INTELLIGENCE</h3>
-                <TextReveal className="text-xl text-gray-300 mb-8 leading-relaxed">
+              <div>
+                <h3 className="text-4xl font-black mb-8 text-gray-900">AUTONOMOUS INTELLIGENCE</h3>
+                <p className="text-xl text-gray-600 mb-8 leading-relaxed">
                   Our neural network processes over 1 billion data points per second, enabling full self-driving capabilities that adapt and learn from every journey.
-                </TextReveal>
+                </p>
                 
                 <div className="space-y-6">
                   {[
@@ -558,46 +553,24 @@ function App() {
                     "Real-time Decision Making",
                     "Continuous Learning Updates"
                   ].map((feature, index) => (
-                    <motion.div 
-                      key={index} 
-                      className="flex items-center space-x-4"
-                      initial={{ opacity: 0, x: -30 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.6, delay: index * 0.1 }}
-                      viewport={{ once: true }}
-                    >
-                      <div className="w-2 h-2 bg-orange-500 rounded-full pulse-glow"></div>
-                      <span className="text-lg font-medium">{feature}</span>
-                    </motion.div>
+                    <div key={index} className="flex items-center space-x-4">
+                      <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
+                      <span className="text-lg font-medium text-gray-700">{feature}</span>
+                    </div>
                   ))}
                 </div>
-              </motion.div>
+              </div>
               
-              <motion.div 
-                className="relative"
-                initial={{ opacity: 0, x: 50 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.8 }}
-                viewport={{ once: true }}
-              >
-                <div className="absolute inset-0 bg-gradient-to-br from-orange-500/20 to-red-500/20 rounded-3xl morphing-blob"></div>
-                <ThreeDCard>
-                  <img 
-                    src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?auto=compress&cs=tinysrgb&w=800" 
-                    alt="Autonomous Technology Dashboard" 
-                    className="relative z-10 rounded-3xl shadow-2xl"
-                  />
-                </ThreeDCard>
-              </motion.div>
+              <div className="relative">
+                <img 
+                  src="https://images.pexels.com/photos/35967/mini-cooper-auto-model-vehicle.jpg?auto=compress&cs=tinysrgb&w=800" 
+                  alt="Autonomous Technology Dashboard" 
+                  className="rounded-3xl shadow-2xl"
+                />
+              </div>
             </div>
 
-            <motion.div 
-              className="grid grid-cols-1 md:grid-cols-3 gap-8"
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
                 {
                   icon: Battery,
@@ -615,21 +588,13 @@ function App() {
                   description: "Seamless integration with smart infrastructure and real-time traffic optimization."
                 }
               ].map((feature, index) => (
-                <motion.div 
-                  key={index} 
-                  className="bg-gray-800 rounded-2xl p-8 hover:bg-gray-750 transition-colors duration-300 hover-lift"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6, delay: index * 0.2 }}
-                  viewport={{ once: true }}
-                  whileHover={{ scale: 1.05 }}
-                >
-                  <feature.icon className="h-12 w-12 text-orange-400 mb-6 floating-animation" />
-                  <h4 className="text-xl font-bold mb-4">{feature.title}</h4>
-                  <p className="text-gray-400 leading-relaxed">{feature.description}</p>
-                </motion.div>
+                <div key={index} className="bg-gray-50 rounded-2xl p-8 hover:bg-gray-100 transition-colors duration-300">
+                  <feature.icon className="h-12 w-12 text-orange-500 mb-6" />
+                  <h4 className="text-xl font-bold mb-4 text-gray-900">{feature.title}</h4>
+                  <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                </div>
               ))}
-            </motion.div>
+            </div>
           </div>
         </section>
 
@@ -810,7 +775,7 @@ function App() {
         </section>
 
         {/* Contact Section */}
-        <section className="py-24 bg-gray-50">
+        <section id="contact" className="py-24 bg-gray-50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
               <motion.div
@@ -953,7 +918,7 @@ function App() {
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
-                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 rounded-xl flex items-center justify-center pulse-glow">
+                  <div className="w-12 h-12 bg-gradient-to-br from-orange-500 via-orange-400 to-pink-500 rounded-xl flex items-center justify-center pulse-glow">
                     <Car className="h-7 w-7 text-white" />
                   </div>
                   <div>
@@ -1095,6 +1060,48 @@ function App() {
                     </MagneticButton>
                   </div>
                 ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Car Details Modal */}
+        {isCarDetailsOpen && selectedCarDetails && (
+          <div className="fixed inset-0 z-60 bg-black/70 flex items-center justify-center">
+            <div className="bg-white rounded-3xl p-8 max-w-4xl w-full shadow-2xl relative">
+              <button className="absolute top-4 right-4 p-2 rounded-full hover:bg-gray-100" onClick={() => setIsCarDetailsOpen(false)}>
+                <X className="h-6 w-6" />
+              </button>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div>
+                  <img src={selectedCarDetails.image} alt={selectedCarDetails.name} className="w-full h-80 object-cover rounded-2xl" />
+                </div>
+                <div>
+                  <div className="text-sm font-bold text-orange-500 tracking-widest mb-2">{selectedCarDetails.type}</div>
+                  <h2 className="text-4xl font-black text-gray-900 mb-4">{selectedCarDetails.name}</h2>
+                  <p className="text-lg text-gray-600 mb-6">
+                    Experience the perfect blend of performance, luxury, and innovation. The {selectedCarDetails.name} represents the pinnacle of automotive engineering with cutting-edge technology and sustainable design.
+                  </p>
+                  <div className="grid grid-cols-2 gap-4 mb-6">
+                    <div className="bg-gray-50 rounded-xl p-4">
+                      <div className="text-2xl font-black text-orange-500">{selectedCarDetails.range}</div>
+                      <div className="text-sm font-bold text-gray-600">RANGE</div>
+                    </div>
+                    <div className="bg-gray-50 rounded-xl p-4">
+                      <div className="text-2xl font-black text-orange-500">{selectedCarDetails.acceleration}</div>
+                      <div className="text-sm font-bold text-gray-600">0-60 MPH</div>
+                    </div>
+                  </div>
+                  <div className="text-3xl font-black text-gray-900 mb-6">{selectedCarDetails.price}</div>
+                  <div className="flex gap-4">
+                    <MagneticButton className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 text-white py-3 rounded-full font-bold hover:shadow-lg transition-all duration-300 cursor-pointer" onClick={() => { setSelectedVehicle(selectedCarDetails.name); setIsConfiguratorOpen(true); setIsCarDetailsOpen(false); }}>
+                      CONFIGURE
+                    </MagneticButton>
+                    <MagneticButton className="flex-1 border-2 border-gray-300 text-gray-700 hover:border-orange-500 hover:text-orange-500 py-3 rounded-full font-bold transition-all duration-300 cursor-pointer" onClick={() => { openTestDrive(selectedCarDetails.name); setIsCarDetailsOpen(false); }}>
+                      TEST DRIVE
+                    </MagneticButton>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
